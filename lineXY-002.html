@@ -92,7 +92,7 @@ body{
     width: 11px;
 }
 .help-text {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 2px;
     display: block;
     font-family: helvetica;
@@ -171,7 +171,8 @@ function drawLine(x1,y1,x2,y2){
 }
 
 // content = content + drawLine(100,100,200,200); 
-
+    
+  /*
   content = content + drawLine(0,0,50,50); 
   content = content + drawLine(50,50,100,50);
   content = content + drawLine(100,50,150,0);
@@ -185,26 +186,35 @@ function drawLine(x1,y1,x2,y2){
   content = content + drawLine2(400,300,400,0,20,"#0000ff",0.5);
   content = content + drawLine2(500,100,600,200,20,"#00ff00",0.5);
   content = content + drawLine3(50,50,600,200,40,"#ffff00",0.5,true,10,"#00ffff");
+  */
 
-  content = content + drawLine3(800,100,1000,100,4,"#ff0000",0.7,false,10,"#00ffff");
-  content = content + drawLine3(800,200,1000,150,4,"#ff0000",0.7,false,10,"#00ffff");
-  content = content + drawLine3(1000,150,1100,200,4,"#ff0000",0.7,false,10,"#00ffff");
-  content = content + drawLine3(1100,200,1100,250,4,"#ff0000",0.7,false,10,"#00ffff");
-  content = content + drawLine3(1100,250,1000,300,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(100,100,100,50,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(200,100,250,50,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(300,100,350,100,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(400,100,450,150,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(500,100,500,150,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(600,100,550,150,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(700,100,650,100,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(800,100,750,50,4,"#ff0000",0.7,false,10,"#00ffff");
 
-  content = content + drawLine3(1000,250,900,275,4,"#ff0000",0.7,false,10,"#00ffff");
-
-  content = content + drawLine3(800,400,700,300,4,"#ff0000",0.7,false,10,"#00ffff");
-  content = content + drawLine3(600,400,550,300,4,"#ff0000",0.7,false,10,"#00ffff");
+  content = content + drawLine3(100,300,125,250,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(200,300,250,275,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(300,300,350,325,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(400,300,425,350,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(500,300,475,350,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(600,300,550,325,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(700,300,650,275,4,"#ff00ff",0.7,false,10,"#00ffff");
+  content = content + drawLine3(800,300,775,250,4,"#ff00ff",0.7,false,10,"#00ffff");
 
   container.innerHTML = content;
 
 
 // esta fincion pinta lineas de grosores varios
 function drawLine2(x1,y1,x2,y2,grosor,color,opacity){
-    //console.log("---> draw new line: ",x1,y1,x2,y2);
 
-    PSET(x2,y2,"001","line-end");
+    console.log("---> draw new line: ",x1,y1,x2,y2);
+
+    
 
     var i = 0;
     var h = grosor;
@@ -224,6 +234,8 @@ function drawLine2(x1,y1,x2,y2,grosor,color,opacity){
     var ang = radianes * 180 / Math.PI; 
 
     // Esto funciona muy mal!!! Cuando las lineas se pintan desde puntos grandes a chicos se calcula mal el angulo.
+
+    /*
     if (cateto1 <0 && cateto2 <0){
         console.log("Los dos menores!");
         ang = ang -90;
@@ -233,19 +245,32 @@ function drawLine2(x1,y1,x2,y2,grosor,color,opacity){
             ang = ang -270;
         }
     }
+    */
 
     console.log("ang:",ang);
+    PSET(x2,y2,"001","ang:"+ang+"; c1:"+cateto1+"; c2: "+cateto1+";");
 
     var string = '<div id="line-'+i+'" class="line" style="top:'+y1+'px;left:'+x1+'px; width:'+w+'px; height:'+h+'px; transform: rotateZ('+ang+'deg) translateY(-'+grosor/2+'px); background-color: '+color+'; opacity:'+opacity+';"></div>';
     return string;
 }
 
-// la funcion 3 pinta con los limites de la linea redondeados y con un degradado brillante que ilumina!
 function drawLine3(x1,y1,x2,y2,grosor,color,opacity, roundBorder, longSombra, colSombra){
 
-    PSET(x2,y2,"001","line-end P("+x2+","+y2+")");
+    //PSET(x2,y2,"001","line-end P("+x2+","+y2+")");
 
-    //console.log("---> draw new line: ",x1,y1,x2,y2);
+    console.log("---> draw new line: ",x1,y1,x2,y2);
+
+    if (x2 < x1){
+        var aux_x = x1;
+        x1 = x2;
+        x2 = aux_x;
+
+        var aux_y = y1;
+        y1 = y2;
+        y2 = aux_y;
+    }
+    
+
     var i = 0;
     var h = grosor;
     var cateto1 = x2-x1
@@ -263,17 +288,10 @@ function drawLine3(x1,y1,x2,y2,grosor,color,opacity, roundBorder, longSombra, co
 
     var ang = radianes * 180 / Math.PI; 
 
-    // esto funciona muy mal!!!
-    if (cateto1 <0 && cateto2 <0){
-        console.log("Los dos menores!");
-        ang = ang -90;
-    } else {
-        if (cateto1 <0 && cateto2 >0){
-            console.log("Los dos menores!");
-            ang = ang -270;
-        }
-    }
     console.log("ang:",ang);
+    
+    PSET(x2,y2,"001","ang:"+ang.toFixed(2)+"; c1:"+cateto1+"; c2: "+cateto1+";");
+
 
     var string = '<div id="line-'+i+'" class="line" style="top:'+y1+'px;left:'+x1+'px; width:'+w+'px; height:'+h+'px; transform: rotateZ('+ang+'deg) translateX(-'+grosor/2+'px) translateY(-'+grosor/2+'px); background-color: '+color+'; opacity:'+opacity+'; border-radius: '+grosor+'px; box-shadow: 0 0 '+ longSombra +'px '+ colSombra +';"></div>';
     return string;
