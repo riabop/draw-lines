@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<head>
+<title>line(x,y)</title>
+<style type="text/css">
+
+body{
+	overflow: hidden;
+}
+
+/* ----------------------------------------------------- */
+.mainContainer {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+	overflow: hidden;
+    background-image: url("bg-005.gif");
+
+	-webkit-perspective: 900px; /* 1200px; */
+	perspective: 900px; /* 1200px; */	
+
+	-webkit-perspective-origin: 50% 50%;
+	perspective-origin: 50% 50%;
+}
+
+.line{
+    background-color: red;
+    border: medium none;
+    display: block;
+    height: 1px;
+    left: 0;
+    opacity: 1;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100px;
+    transform-origin: 0 0 0;
+}
+
+.extra{
+    /* transform: rotateZ(45deg) translateZ(0px); */
+    transform: rotateZ(45deg);
+    transform-origin: 0 0 0;
+}
+
+</style>
+</head>
+
+<body class="radial-center">
+    <div id="mainContainer" class="mainContainer">
+        <div id="line" class="line extra"></div>
+    </div>
+</body>
+
+<script>//<![CDATA[
+
+console.log("mio!");
+var container = document.getElementById("mainContainer");
+var content="";
+
+// This function draws a one pixel simple line. 
+function drawLine(x1,y1,x2,y2){
+    console.log("---> draw new line: ",x1,y1,x2,y2);
+    var i = 0;
+    var h = 1;
+    var cateto1 = x2-x1;
+    console.log("cateto1:",cateto1);
+
+    var cateto2 = y2-y1;
+    console.log("cateto2:",cateto2);
+
+    var hipotenusa = Math.sqrt(cateto1*cateto1+cateto2*cateto2); 
+    var w=hipotenusa;
+    console.log("hipotenusa:",hipotenusa);
+
+    var radianes = Math.asin(cateto2/hipotenusa);
+    console.log("radianes:",radianes);
+
+    var ang = radianes * 180 / Math.PI; 
+
+
+    // esto funciona muy mal!!!
+    if (cateto1 <0 && cateto2 <0){
+        console.log("Los dos menores!");
+        ang = ang -90;
+    } else {
+        if (cateto1 <0 && cateto2 >0){
+            console.log("Los dos menores!");
+            ang = ang -270;
+        }
+    }
+
+    console.log("ang:",ang);
+
+    var string = '<div id="line-'+i+'" class="line" style="top:'+y1+'px;left:'+x1+'px; width:'+w+'px; height:'+h+'px; transform: rotateZ('+ang+'deg);"></div>';
+    return string;
+}
+
+// content = content + drawLine(100,100,200,200); 
+
+  content = content + drawLine(0,0,50,50); 
+  content = content + drawLine(50,50,100,50);
+  content = content + drawLine(100,50,150,0);
+  content = content + drawLine(150,0,250,100);
+  content = content + drawLine(250,100,250,200);
+  content = content + drawLine(250,200,300,200);
+  content = content + drawLine(300,200,300,50);
+  content = content + drawLine(300,50,250,0);
+  content = content + drawLine(250,0,200,50);
+  content = content + drawLine2(100,100,400,300,10);
+  content = content + drawLine2(400,300,400,0,20,"#0000ff",0.5);
+  content = content + drawLine2(500,100,600,200,20,"#00ff00",0.5);
+  content = content + drawLine3(50,50,600,200,40,"#ffff00",0.5,true,10,"#00ffff");
+  container.innerHTML = content;
+
+
+// esta fincion pinta lineas de grosores varios
+function drawLine2(x1,y1,x2,y2,grosor,color,opacity){
+    //console.log("---> draw new line: ",x1,y1,x2,y2);
+    var i = 0;
+    var h = grosor;
+    var cateto1 = x2-x1;
+    console.log("cateto1:",cateto1);
+
+    var cateto2 = y2-y1;
+    console.log("cateto2:",cateto2);
+
+    var hipotenusa = Math.sqrt(cateto1*cateto1+cateto2*cateto2); 
+    var w=hipotenusa;
+    console.log("hipotenusa:",hipotenusa);
+
+    var radianes = Math.asin(cateto2/hipotenusa);
+    console.log("radianes:",radianes);
+
+    var ang = radianes * 180 / Math.PI; 
+
+    // Esto funciona muy mal!!! Cuando las lineas se pintan desde puntos grandes a chicos se calcula mal el angulo.
+    if (cateto1 <0 && cateto2 <0){
+        console.log("Los dos menores!");
+        ang = ang -90;
+    } else {
+        if (cateto1 <0 && cateto2 >0){
+            console.log("Los dos menores!");
+            ang = ang -270;
+        }
+    }
+
+    console.log("ang:",ang);
+
+    var string = '<div id="line-'+i+'" class="line" style="top:'+y1+'px;left:'+x1+'px; width:'+w+'px; height:'+h+'px; transform: rotateZ('+ang+'deg) translateY(-'+grosor/2+'px); background-color: '+color+'; opacity:'+opacity+';"></div>';
+    return string;
+}
+
+// la funcion 3 pinta con los limites de la linea redondeados y con un degradado brillante que ilumina!
+function drawLine3(x1,y1,x2,y2,grosor,color,opacity, roundBorder, longSombra, colSombra){
+    //console.log("---> draw new line: ",x1,y1,x2,y2);
+    var i = 0;
+    var h = grosor;
+    var cateto1 = x2-x1
+    //console.log("cateto1:",cateto1);
+
+    var cateto2 = y2-y1;
+    //console.log("cateto2:",cateto2);
+
+    var hipotenusa = Math.sqrt(cateto1*cateto1+cateto2*cateto2); 
+    var w=hipotenusa + grosor;
+    //console.log("hipotenusa:",hipotenusa);
+
+    var radianes = Math.asin(cateto2/hipotenusa);
+    //console.log("radianes:",radianes);
+
+    var ang = radianes * 180 / Math.PI; 
+
+    // esto funciona muy mal!!!
+    if (cateto1 <0 && cateto2 <0){
+        console.log("Los dos menores!");
+        ang = ang -90;
+    } else {
+        if (cateto1 <0 && cateto2 >0){
+            console.log("Los dos menores!");
+            ang = ang -270;
+        }
+    }
+    console.log("ang:",ang);
+
+    var string = '<div id="line-'+i+'" class="line" style="top:'+y1+'px;left:'+x1+'px; width:'+w+'px; height:'+h+'px; transform: rotateZ('+ang+'deg) translateX(-'+grosor/2+'px) translateY(-'+grosor/2+'px); background-color: '+color+'; opacity:'+opacity+'; border-radius: '+grosor+'px; box-shadow: 0 0 '+ longSombra +'px '+ colSombra +';"></div>';
+    return string;
+}
+
+
+</script>
+
+</html>
